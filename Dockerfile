@@ -22,3 +22,5 @@ VOLUME /usr/local/openresty/nginx/client_body_temp
 VOLUME /usr/local/openresty/nginx/fastcgi_temp
 VOLUME /usr/local/openresty/nginx/nginx/uwsgi_temp
 VOLUME /usr/local/openresty/nginx/scgi_temp
+
+EXPOSE 80

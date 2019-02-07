@@ -16,8 +16,9 @@ RUN for i in logs proxy_temp client_body_temp fastcgi_temp uwsgi_temp scgi_temp;
         chmod 1775 /usr/local/openresty/nginx/$i; \
     done
 
-VOLUME /var/cache/nginx/proxy_temp
-VOLUME /var/cache/nginx/client_body_temp
-VOLUME /var/cache/nginx/fastcgi_temp
-VOLUME /var/cache/nginx/uwsgi_temp
-VOLUME /var/cache/nginx/scgi_temp
+VOLUME /usr/local/openresty/nginx/logs
+VOLUME /usr/local/openresty/nginx/proxy_temp
+VOLUME /usr/local/openresty/nginx/client_body_temp
+VOLUME /usr/local/openresty/nginx/fastcgi_temp
+VOLUME /usr/local/openresty/nginx/nginx/uwsgi_temp
+VOLUME /usr/local/openresty/nginx/scgi_temp

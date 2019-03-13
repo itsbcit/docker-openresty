@@ -1,5 +1,8 @@
 FROM openresty/openresty:centos
 
+RUN yum -y --setopt tsflags=nodocs --setopt timeout=5 update \
+ && rm -rf /var/cache/yum/*
+
 RUN setcap 'cap_net_bind_service=+ep' /usr/local/openresty/nginx/sbin/nginx
 
 RUN for i in logs proxy_temp client_body_temp fastcgi_temp uwsgi_temp scgi_temp;do \

@@ -1,12 +1,4 @@
-FROM openresty/openresty:stretch-fat
-
-RUN apt-get --yes install libcap2-bin
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libcap2-bin
-
-RUN rm -rf /var/lib/apt/lists
+FROM openresty/openresty:centos
 
 RUN setcap 'cap_net_bind_service=+ep' /usr/local/openresty/nginx/sbin/nginx
 

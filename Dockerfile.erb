@@ -1,6 +1,5 @@
 FROM openresty/openresty:centos
-LABEL maintainer="jesse@weisner.ca"
-LABEL build_id="1567200641"
+<%= snippet('labels', binding) -%>
 
 RUN yum -y --setopt tsflags=nodocs --setopt timeout=5 update \
  && rm -rf /var/cache/yum/*

@@ -1,22 +1,40 @@
-FROM openresty/openresty:centos
-<%= snippet('labels', binding) -%>
+FROM bcit/alpine:<%= image.labels['alpine_version'] %>
 
-RUN yum -y --setopt tsflags=nodocs --setopt timeout=5 update \
- && rm -rf /var/cache/yum/*
+RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
+        -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
+ && echo "http://openresty.org/package/alpine/v<%= image.labels['alpine_version'] %>/main" \
+        >> /etc/apk/repositories
 
-RUN setcap 'cap_net_bind_service=+ep' /usr/local/openresty/nginx/sbin/nginx
+RUN apk add --no-cache \
+    openresty \
+    openresty-resty
 
-RUN for i in logs proxy_temp client_body_temp fastcgi_temp uwsgi_temp scgi_temp;do \
-        mkdir -p /usr/local/openresty/nginx/$i; \
-        chown 0:0 /usr/local/openresty/nginx/$i; \
-        chmod 1775 /usr/local/openresty/nginx/$i; \
-    done
+RUN mkdir -p \
+        /application \
+        /usr/local/openresty/nginx/conf.d \
+ && chown -R 0:0 \
+        /application \
+        /usr/local/openresty/nginx/conf \
+        /usr/local/openresty/nginx/conf.d \
+        /usr/local/openresty/nginx/logs \
+        /usr/local/openresty/nginx \
+        /var/run \
+ && chmod 775 \
+        /application \
+        /usr/local/openresty/nginx/conf \
+        /usr/local/openresty/nginx/conf.d \
+        /usr/local/openresty/nginx/logs \
+        /usr/local/openresty/nginx \
+        /var/run
 
-VOLUME /usr/local/openresty/nginx/logs
-VOLUME /usr/local/openresty/nginx/proxy_temp
-VOLUME /usr/local/openresty/nginx/client_body_temp
-VOLUME /usr/local/openresty/nginx/fastcgi_temp
-VOLUME /usr/local/openresty/nginx/nginx/uwsgi_temp
-VOLUME /usr/local/openresty/nginx/scgi_temp
+COPY 50-copy-config.sh /docker-entrypoint.d/
+COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+COPY default.conf /usr/local/openresty/nginx/conf.d/default.conf
 
-EXPOSE 80
+VOLUME /application
+
+WORKDIR /application
+
+EXPOSE 8080
+
+CMD ["/usr/local/openresty/nginx/sbin/nginx", "-g", "daemon off;"]

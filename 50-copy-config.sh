@@ -1,5 +1,5 @@
 config_path=${CONFIG_PATH:-/config}
-dest_path=${HTTPD_CONFIG_PATH:-/usr/local/openresty/nginx/conf}
+dest_path=${HTTPD_CONFIG_PATH:-/usr/local/openresty/nginx}
 
 destfilename() {
     sourcefile=$1
@@ -20,7 +20,7 @@ if [ -d $config_path ]; then
                 cp -fv $f $dest_path/vhost.d/$(destfilename $f "vhost.d")
                 ;;
             *)
-                cp -fv $f ${dest_path}/
+                cp -fv $f ${dest_path}/conf
                 ;;
         esac
     done

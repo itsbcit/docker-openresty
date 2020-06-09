@@ -1,5 +1,7 @@
 FROM bcit/alpine:<%= image.labels['alpine_version'] %>
 
+<%= snippet('labels', binding) -%>
+
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
  && echo "http://openresty.org/package/alpine/v<%= image.labels['alpine_version'] %>/main" \

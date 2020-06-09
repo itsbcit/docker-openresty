@@ -12,10 +12,6 @@ RUN apk add --no-cache \
     openresty-opm \
     openresty-resty
 
-RUN opm install \
-        bungle/lua-resty-session \
-        zmartzone/lua-resty-openidc
-
 RUN mkdir -p \
         /application \
         /usr/local/openresty/nginx/conf.d \

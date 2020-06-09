@@ -2,7 +2,7 @@ FROM bcit/alpine:3.11
 
 LABEL maintainer="jesse@weisner.ca"
 LABEL alpine_version="3.11"
-LABEL build_id="1591726168"
+LABEL build_id="1591726461"
 
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
@@ -13,10 +13,6 @@ RUN apk add --no-cache \
     openresty \
     openresty-opm \
     openresty-resty
-
-RUN opm install \
-        bungle/lua-resty-session \
-        zmartzone/lua-resty-openidc
 
 RUN mkdir -p \
         /application \

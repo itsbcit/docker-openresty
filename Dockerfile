@@ -1,9 +1,8 @@
 FROM bcit/alpine:3.11
 
-ENV KEYCLOAK_ENDPOINT "https://keycloak.example.com"
-ENV KEYCLOAK_REALM "master"
-ENV KEYCLOAK_CLIENT_ID "nginx"
-ENV KEYCLOAK_CLIENT_SECRET "00000000-0000-0000-0000-000000000000"
+LABEL maintainer="jesse@weisner.ca"
+LABEL alpine_version="3.11"
+LABEL build_id="1591726168"
 
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \

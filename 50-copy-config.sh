@@ -1,5 +1,6 @@
 config_path=${CONFIG_PATH:-/config}
 dest_path=${HTTPD_CONFIG_PATH:-/usr/local/openresty/nginx}
+lua_path=${RESTY_LUA_PATH:-/usr/local/openresty/site/lualib}
 
 destfilename() {
     sourcefile=$1
@@ -9,7 +10,7 @@ destfilename() {
 }
 
 if [ -d $config_path ]; then
-    for f in $(find -L ${config_path} -maxdepth 1 -type f -name "*.conf");do
+    for f in $(find -L ${config_path} -maxdepth 1 -type f -name "*.conf" -o -name "*.lua");do
         case $(basename $f) in
             conf.d-*.conf)
                 [ -d $dest_path/conf.d ] || mkdir -pv $dest_path/conf.d
@@ -19,9 +20,17 @@ if [ -d $config_path ]; then
                 [ -d $dest_path/vhost.d ] || mkdir -pv $dest_path/vhost.d
                 cp -fv $f $dest_path/vhost.d/$(destfilename $f "vhost.d")
                 ;;
+            resty-*.lua)
+                cp -fv $f $lua_path/resty/$(destfilename $f "resty")
+                ;;
+            *.lua)
+                cp -fv $f $lua_path/
+                ;;
             *)
                 cp -fv $f ${dest_path}/conf
                 ;;
         esac
     done
+
+
 fi

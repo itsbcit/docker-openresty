@@ -2,7 +2,7 @@ FROM bcit/alpine:3.11
 
 LABEL maintainer="jesse@weisner.ca"
 LABEL alpine_version="3.11"
-LABEL build_id="1594764000"
+LABEL build_id="1594765103"
 
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \

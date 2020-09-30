@@ -2,7 +2,10 @@ FROM bcit/alpine:3.11
 
 LABEL maintainer="jesse@weisner.ca"
 LABEL alpine_version="3.11"
-LABEL build_id="1594765103"
+LABEL build_id="1601509288"
+
+ENV RUNUSER nginx
+ENV HOME /var/cache/nginx
 
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
@@ -16,9 +19,11 @@ RUN apk add --no-cache \
 
 RUN mkdir -p \
         /application \
+        /config \
         /usr/local/openresty/nginx/conf.d \
  && chown -R 0:0 \
         /application \
+        /config \
         /usr/local/openresty/nginx/conf \
         /usr/local/openresty/nginx/conf.d \
         /usr/local/openresty/nginx/logs \
@@ -26,18 +31,21 @@ RUN mkdir -p \
         /var/run \
  && chmod 775 \
         /application \
+        /config \
         /usr/local/openresty/nginx/conf \
         /usr/local/openresty/nginx/conf.d \
         /usr/local/openresty/nginx/logs \
         /usr/local/openresty/nginx \
-        /var/run
+        /var/run \
+ && ln -sf /usr/local/openresty/nginx/html/index.html /application/index.html \
+ && touch /usr/local/openresty/nginx/html/ping \
+ && adduser --home /var/cache/nginx --gecos "Nginx Web Server" --system --disabled-password --no-create-home --ingroup root nginx
 
 COPY 50-copy-config.sh /docker-entrypoint.d/
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY default.conf /usr/local/openresty/nginx/conf.d/default.conf
 
-VOLUME /application
-
+USER nginx
 WORKDIR /application
 
 EXPOSE 8080

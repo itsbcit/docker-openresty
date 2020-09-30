@@ -2,6 +2,9 @@ FROM bcit/alpine:<%= image.labels['alpine_version'] %>
 
 <%= snippet('labels', binding) -%>
 
+ENV RUNUSER nginx
+ENV HOME /var/cache/nginx
+
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
  && echo "http://openresty.org/package/alpine/v<%= image.labels['alpine_version'] %>/main" \
@@ -28,7 +31,9 @@ RUN mkdir -p \
         /usr/local/openresty/nginx/conf.d \
         /usr/local/openresty/nginx/logs \
         /usr/local/openresty/nginx \
-        /var/run
+        /var/run \
+ && ln -sf /usr/local/openresty/nginx/html/index.html /application/index.html \
+ && adduser --home /var/cache/nginx --gecos "Nginx Web Server" --system --disabled-password --no-create-home --ingroup root nginx
 
 COPY 50-copy-config.sh /docker-entrypoint.d/
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
@@ -36,6 +41,7 @@ COPY default.conf /usr/local/openresty/nginx/conf.d/default.conf
 
 VOLUME /application
 
+USER nginx
 WORKDIR /application
 
 EXPOSE 8080

@@ -33,6 +33,7 @@ RUN mkdir -p \
         /usr/local/openresty/nginx \
         /var/run \
  && ln -sf /usr/local/openresty/nginx/html/index.html /application/index.html \
+ && touch /usr/local/openresty/nginx/html/ping \
  && adduser --home /var/cache/nginx --gecos "Nginx Web Server" --system --disabled-password --no-create-home --ingroup root nginx
 
 COPY 50-copy-config.sh /docker-entrypoint.d/

@@ -17,9 +17,11 @@ RUN apk add --no-cache \
 
 RUN mkdir -p \
         /application \
+        /config \
         /usr/local/openresty/nginx/conf.d \
  && chown -R 0:0 \
         /application \
+        /config \
         /usr/local/openresty/nginx/conf \
         /usr/local/openresty/nginx/conf.d \
         /usr/local/openresty/nginx/logs \
@@ -27,6 +29,7 @@ RUN mkdir -p \
         /var/run \
  && chmod 775 \
         /application \
+        /config \
         /usr/local/openresty/nginx/conf \
         /usr/local/openresty/nginx/conf.d \
         /usr/local/openresty/nginx/logs \
@@ -39,8 +42,6 @@ RUN mkdir -p \
 COPY 50-copy-config.sh /docker-entrypoint.d/
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY default.conf /usr/local/openresty/nginx/conf.d/default.conf
-
-VOLUME /application
 
 USER nginx
 WORKDIR /application

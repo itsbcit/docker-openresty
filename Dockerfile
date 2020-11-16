@@ -6,6 +6,7 @@ LABEL build_id="1601509288"
 
 ENV RUNUSER nginx
 ENV HOME /var/cache/nginx
+ENV RESTY_SESSION_SECRET "00000000000000000000000000000000"
 
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \

@@ -42,8 +42,10 @@ RUN mkdir -p \
  && adduser --home /var/cache/nginx --gecos "Nginx Web Server" --system --disabled-password --no-create-home --ingroup root nginx
 
 COPY 50-copy-config.sh /docker-entrypoint.d/
+COPY 60-set-resty-env.sh /docker-entrypoint.d/
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY default.conf /usr/local/openresty/nginx/conf.d/default.conf
+COPY 00-openresty.conf /usr/local/openresty/nginx/conf.d/00-openresty.conf
 
 USER nginx
 WORKDIR /application

@@ -3,3 +3,7 @@ image_name: openshift-openresty
 labels:
   maintainer: 'jesse@weisner.ca'
   alpine_version: '3.11'
+files:
+  - 00-openresty.conf
+  - 50-copy-config.sh
+  - 60-set-resty-env.sh

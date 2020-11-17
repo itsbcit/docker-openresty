@@ -10,7 +10,7 @@ destfilename() {
 }
 
 if [ -d $config_path ]; then
-    for f in $(find -L ${config_path} -maxdepth 1 -type f -name "*.conf" -o -name "*.lua");do
+    for f in $(find -L ${config_path} -maxdepth 1 -type f );do
         case $(basename $f) in
             conf.d-*.conf)
                 [ -d $dest_path/conf.d ] || mkdir -pv $dest_path/conf.d

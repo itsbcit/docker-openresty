@@ -1,6 +1,6 @@
 resty_config="/usr/local/openresty/nginx/conf/resty-00-set.conf"
 
-[ ! -f $resty_config ] || return
+[ -f $resty_config ] || return
 
 if [ $RESTY_SESSION_SECRET != "00000000000000000000000000000000" ];then
     # check for "resty_session_secret" already set

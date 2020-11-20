@@ -1,3 +1,25 @@
+FROM bcit/alpine:<%= image.labels['alpine_version'] %> as builder
+RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
+        -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
+ && echo "http://openresty.org/package/alpine/v<%= image.labels['alpine_version'] %>/main" \
+        >> /etc/apk/repositories
+
+RUN apk add --no-cache \
+    openresty \
+    openssl \
+    make
+
+ADD https://luarocks.github.io/luarocks/releases/luarocks-3.4.0.tar.gz ./luarocks-3.4.0.tar.gz
+RUN tar zxf luarocks-3.4.0.tar.gz
+WORKDIR /luarocks-3.4.0
+
+RUN ./configure --prefix=/usr/local/openresty/luajit \
+    --with-lua=/usr/local/openresty/luajit/ \
+    --lua-suffix=jit \
+    --with-lua-include=/usr/local/openresty/luajit/include/luajit-2.1 \
+ && make \
+ && make install
+
 FROM bcit/alpine:<%= image.labels['alpine_version'] %>
 
 <%= snippet('labels', binding) -%>
@@ -14,12 +36,23 @@ RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
 RUN apk add --no-cache \
     openresty \
     openresty-opm \
-    openresty-resty
+    openresty-resty \
+    openssl \
+    unzip
+
+COPY --from=builder /usr/local/openresty/luajit/bin/luarocks /usr/local/openresty/luajit/bin/luarocks
+COPY --from=builder /usr/local/openresty/luajit/bin/luarocks-admin /usr/local/openresty/luajit/bin/luarocks-admin
+COPY --from=builder /usr/local/openresty/luajit/etc /usr/local/openresty/luajit/etc
+COPY --from=builder /usr/local/openresty/luajit/share/lua/5.1/luarocks /usr/local/openresty/luajit/share/lua/5.1/luarocks
+
+RUN /usr/local/openresty/luajit/bin/luarocks install inspect \
+ && rm -rf /var/cache/nginx
 
 RUN mkdir -p \
         /application \
         /config \
         /usr/local/openresty/nginx/conf.d \
+        /var/cache/nginx \
  && chown -R 0:0 \
         /application \
         /config \
@@ -28,6 +61,7 @@ RUN mkdir -p \
         /usr/local/openresty/nginx/logs \
         /usr/local/openresty/nginx \
         /var/run \
+        /var/cache/nginx \
  && chmod 775 \
         /application \
         /config \
@@ -36,6 +70,7 @@ RUN mkdir -p \
         /usr/local/openresty/nginx/logs \
         /usr/local/openresty/nginx \
         /var/run \
+        /var/cache/nginx \
  && ln -sf /usr/local/openresty/nginx/html/index.html /application/index.html \
  && touch /usr/local/openresty/nginx/html/ping \
  && adduser --home /var/cache/nginx --gecos "Nginx Web Server" --system --disabled-password --no-create-home --ingroup root nginx

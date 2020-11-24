@@ -24,7 +24,7 @@ FROM bcit/alpine:3.11
 
 LABEL maintainer="jesse@weisner.ca"
 LABEL alpine_version="3.11"
-LABEL build_id="1606253603"
+LABEL build_id="1606254836"
 
 ENV RUNUSER nginx
 ENV HOME /var/cache/nginx
@@ -78,13 +78,14 @@ RUN mkdir -p \
  && adduser --home /var/cache/nginx --gecos "Nginx Web Server" --system --disabled-password --no-create-home --ingroup root nginx
 
 COPY 50-copy-config.sh /docker-entrypoint.d/
-COPY 60-set-resty-env.sh /docker-entrypoint.d/
+
+USER nginx
+
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY default.conf /usr/local/openresty/nginx/conf.d/default.conf
 COPY 00-openresty.conf /usr/local/openresty/nginx/conf.d/00-openresty.conf
-COPY resty-00-set.conf /usr/local/openresty/nginx/conf/resty-00-set.conf
+COPY resty-env.conf /usr/local/openresty/nginx/conf/resty-env.conf
 
-USER nginx
 WORKDIR /application
 
 EXPOSE 8080

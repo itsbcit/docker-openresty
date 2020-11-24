@@ -24,7 +24,7 @@ FROM bcit/alpine:3.11
 
 LABEL maintainer="jesse@weisner.ca"
 LABEL alpine_version="3.11"
-LABEL build_id="1606254836"
+LABEL build_id="1606256348"
 
 ENV RUNUSER nginx
 ENV HOME /var/cache/nginx

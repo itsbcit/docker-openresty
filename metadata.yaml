@@ -6,5 +6,3 @@ labels:
 files:
   - 00-openresty.conf
   - 50-copy-config.sh
-  - 60-set-resty-env.sh
-  - resty-00-set.conf

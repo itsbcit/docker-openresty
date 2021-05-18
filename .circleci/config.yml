@@ -23,8 +23,6 @@ jobs:
       tag: '12.6.0'
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/openshift-openresty
       - setup_variable
       - run:
           name: Build docker image
@@ -32,7 +30,7 @@ jobs:
       - run:
           name: Push image
           command: |
-            echo $PAT | docker login ghcr.io --username $GITHUB_ACCOUNT --password-stdin
+            echo $GITHUB_TOKEN | docker login ghcr.io --username $GITHUB_ACCOUNT --password-stdin
             docker tag $IMAGE_NAME ghcr.io/appman-agm/$IMAGE_NAME:$TAG
             docker push ghcr.io/appman-agm/$IMAGE_NAME:$TAG
       - run:
@@ -51,6 +49,7 @@ workflows:
   build-and-deploy:
     jobs:
       - build:
+          context: agm-shared-ecr
           filters:
             branches:
               only:

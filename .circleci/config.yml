@@ -1,0 +1,56 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.1.0
+
+commands:
+  setup_variable:
+    steps:
+      - run:
+          name: Setup Environment
+          command: |
+            VERSION=$(npm run env | grep npm_package_version | cut -d '=' -f 2)
+            TAG=$VERSION
+            IMAGE_NAME="$CIRCLE_PROJECT_REPONAME"
+            echo "export VERSION=$VERSION" >> $BASH_ENV
+            echo "export IMAGE_NAME=$IMAGE_NAME" >> $BASH_ENV
+            echo "export TAG=$TAG" >> $BASH_ENV
+jobs:
+  build:
+    working_directory: ~/openshift-openresty
+    executor:
+      name: node/default
+      tag: '12.6.0'
+    steps:
+      - checkout
+      - setup_variable
+      - run:
+          name: Build docker image
+          command: docker build -t $IMAGE_NAME .
+      - run:
+          name: Push image
+          command: |
+            echo $GITHUB_TOKEN | docker login ghcr.io --username $GITHUB_ACCOUNT --password-stdin
+            docker tag $IMAGE_NAME ghcr.io/appman-agm/$IMAGE_NAME:$TAG
+            docker push ghcr.io/appman-agm/$IMAGE_NAME:$TAG
+      - run:
+          name: Export image
+          command: docker save $IMAGE_NAME | gzip > $IMAGE_NAME:$TAG.tar.gz
+      - run:
+          name: Creating Dummy Artifacts
+          command: |
+            mkdir -p output
+            cp $IMAGE_NAME:$TAG.tar.gz output
+      - store_artifacts:
+          path: output
+
+workflows:
+  version: 2.1
+  build-and-deploy:
+    jobs:
+      - build:
+          context: agm-shared-ecr
+          filters:
+            branches:
+              only:
+                - release

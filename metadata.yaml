@@ -1,5 +1,7 @@
 ---
 image_name: openshift-openresty
+registries:
+  - url: bcit.io
 labels:
   maintainer: 'jesse@weisner.ca'
   alpine_version: '3.12'

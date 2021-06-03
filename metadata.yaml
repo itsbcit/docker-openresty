@@ -2,9 +2,11 @@
 registries:
   - url: bcit.io
 image_name: openshift-openresty
+registries:
+  - url: bcit.io
 labels:
   maintainer: 'jesse@weisner.ca'
-  alpine_version: '3.12'
+  alpine_version: '3.13'
 files:
   - 00-openresty.conf
   - 50-copy-config.sh

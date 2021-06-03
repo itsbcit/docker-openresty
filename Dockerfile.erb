@@ -1,4 +1,4 @@
-FROM bcit/alpine:<%= image.labels['alpine_version'] %>-latest as builder
+FROM bcit.io/alpine:<%= image.labels['alpine_version'] %>-latest as builder
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
  && echo "http://openresty.org/package/alpine/v<%= image.labels['alpine_version'] %>/main" \
@@ -20,7 +20,7 @@ RUN ./configure --prefix=/usr/local/openresty/luajit \
  && make \
  && make install
 
-FROM bcit/alpine:<%= image.labels['alpine_version'] %>-latest
+FROM bcit.io/alpine:<%= image.labels['alpine_version'] %>-latest
 
 <%= snippet('labels', binding) -%>
 

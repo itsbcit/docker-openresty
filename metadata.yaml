@@ -1,4 +1,6 @@
 ---
+registries:
+  - url: bcit.io
 image_name: openshift-openresty
 labels:
   maintainer: 'jesse@weisner.ca'

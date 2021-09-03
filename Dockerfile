@@ -83,6 +83,10 @@ RUN mkdir -p \
  && touch /usr/local/openresty/nginx/html/ping \
  && adduser --home /var/cache/nginx --gecos "Nginx Web Server" --system --disabled-password --no-create-home --ingroup root nginx
 
+RUN ln -s ../usr/local/openresty/nginx/conf /etc/nginx \
+ && ln -s ../usr/local/openresty/nginx/conf.d /etc/nginx/conf.d \
+ && ln -s /usr/local/openresty/nginx/sbin /usr/sbin/nginx
+
 COPY 50-copy-config.sh /docker-entrypoint.d/
 
 USER nginx

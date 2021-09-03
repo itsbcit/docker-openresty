@@ -8,5 +8,4 @@ labels:
   maintainer: 'jesse@weisner.ca'
   alpine_version: '3.13'
 files:
-  - 00-openresty.conf
   - 50-copy-config.sh

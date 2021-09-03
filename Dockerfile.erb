@@ -81,7 +81,6 @@ USER nginx
 
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY default.conf /usr/local/openresty/nginx/conf.d/default.conf
-COPY 00-openresty.conf /usr/local/openresty/nginx/conf.d/00-openresty.conf
 COPY resty-env.conf /usr/local/openresty/nginx/conf/resty-env.conf
 
 WORKDIR /application

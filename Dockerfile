@@ -24,7 +24,6 @@ RUN ./configure --prefix=/usr/local/openresty/luajit \
 FROM bcit.io/alpine:3.14-latest
 
 LABEL maintainer="jesse@weisner.ca"
-LABEL build_id="1622749974"
 LABEL alpine_version="3.14"
 LABEL openresty_version="1.19.9"
 LABEL lua_version="5.1"

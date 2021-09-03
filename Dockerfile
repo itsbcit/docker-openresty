@@ -1,7 +1,7 @@
-FROM bcit.io/alpine:3.13-latest as builder
+FROM bcit.io/alpine:3.14-latest as builder
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
- && echo "http://openresty.org/package/alpine/v3.13/main" \
+ && echo "http://openresty.org/package/alpine/v3.14/main" \
         >> /etc/apk/repositories
 
 RUN apk add --no-cache \
@@ -20,11 +20,11 @@ RUN ./configure --prefix=/usr/local/openresty/luajit \
  && make \
  && make install
 
-FROM bcit.io/alpine:3.13-latest
+FROM bcit.io/alpine:3.14-latest
 
 LABEL maintainer="jesse@weisner.ca"
-LABEL alpine_version="3.13"
 LABEL build_id="1622749974"
+LABEL alpine_version="3.14"
 
 ENV RUNUSER nginx
 ENV HOME /var/cache/nginx
@@ -32,7 +32,7 @@ ENV RESTY_SESSION_SECRET "00000000000000000000000000000000"
 
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
- && echo "http://openresty.org/package/alpine/v3.13/main" \
+ && echo "http://openresty.org/package/alpine/v3.14/main" \
         >> /etc/apk/repositories
 
 RUN apk add --no-cache \

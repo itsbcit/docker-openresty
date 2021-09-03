@@ -6,6 +6,6 @@ registries:
   - url: bcit.io
 labels:
   maintainer: 'jesse@weisner.ca'
-  alpine_version: '3.13'
+  alpine_version: '3.14'
 files:
   - 50-copy-config.sh

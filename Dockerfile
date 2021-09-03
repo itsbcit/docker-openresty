@@ -5,13 +5,14 @@ RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         >> /etc/apk/repositories
 
 RUN apk add --no-cache \
-    openresty \
+    'luajit=~2.1' \
+    'openresty=~1.19.9' \
     openssl \
     make
 
-ADD https://luarocks.github.io/luarocks/releases/luarocks-3.4.0.tar.gz ./luarocks-3.4.0.tar.gz
-RUN tar zxf luarocks-3.4.0.tar.gz
-WORKDIR /luarocks-3.4.0
+ADD https://luarocks.github.io/luarocks/releases/luarocks-3.7.0.tar.gz ./luarocks.tar.gz
+RUN tar zxf luarocks.tar.gz
+WORKDIR /luarocks-3.7.0
 
 RUN ./configure --prefix=/usr/local/openresty/luajit \
     --with-lua=/usr/local/openresty/luajit/ \
@@ -25,6 +26,11 @@ FROM bcit.io/alpine:3.14-latest
 LABEL maintainer="jesse@weisner.ca"
 LABEL build_id="1622749974"
 LABEL alpine_version="3.14"
+LABEL openresty_version="1.19.9"
+LABEL lua_version="5.1"
+LABEL luarocks_version="3.7.0"
+LABEL luajit_version="2.1"
+LABEL build_id="1630644669"
 
 ENV RUNUSER nginx
 ENV HOME /var/cache/nginx
@@ -36,7 +42,8 @@ RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         >> /etc/apk/repositories
 
 RUN apk add --no-cache \
-    openresty \
+    'luajit=~2.1' \
+    'openresty=~1.19.9' \
     openresty-opm \
     openresty-resty \
     openssl \

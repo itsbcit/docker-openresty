@@ -5,18 +5,19 @@ RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         >> /etc/apk/repositories
 
 RUN apk add --no-cache \
-    openresty \
+    'luajit=~<%= image.labels['luajit_version'] %>' \
+    'openresty=~<%= image.labels['openresty_version'] %>' \
     openssl \
     make
 
-ADD https://luarocks.github.io/luarocks/releases/luarocks-3.4.0.tar.gz ./luarocks-3.4.0.tar.gz
-RUN tar zxf luarocks-3.4.0.tar.gz
-WORKDIR /luarocks-3.4.0
+ADD https://luarocks.github.io/luarocks/releases/luarocks-<%= image.labels['luarocks_version'] %>.tar.gz ./luarocks.tar.gz
+RUN tar zxf luarocks.tar.gz
+WORKDIR /luarocks-<%= image.labels['luarocks_version'] %>
 
 RUN ./configure --prefix=/usr/local/openresty/luajit \
     --with-lua=/usr/local/openresty/luajit/ \
     --lua-suffix=jit \
-    --with-lua-include=/usr/local/openresty/luajit/include/luajit-2.1 \
+    --with-lua-include=/usr/local/openresty/luajit/include/luajit-<%= image.labels['luajit_version'] %> \
  && make \
  && make install
 
@@ -34,7 +35,8 @@ RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         >> /etc/apk/repositories
 
 RUN apk add --no-cache \
-    openresty \
+    'luajit=~<%= image.labels['luajit_version'] %>' \
+    'openresty=~<%= image.labels['openresty_version'] %>' \
     openresty-opm \
     openresty-resty \
     openssl \
@@ -43,7 +45,7 @@ RUN apk add --no-cache \
 COPY --from=builder /usr/local/openresty/luajit/bin/luarocks /usr/local/openresty/luajit/bin/luarocks
 COPY --from=builder /usr/local/openresty/luajit/bin/luarocks-admin /usr/local/openresty/luajit/bin/luarocks-admin
 COPY --from=builder /usr/local/openresty/luajit/etc /usr/local/openresty/luajit/etc
-COPY --from=builder /usr/local/openresty/luajit/share/lua/5.1/luarocks /usr/local/openresty/luajit/share/lua/5.1/luarocks
+COPY --from=builder /usr/local/openresty/luajit/share/lua/<%= image.labels['lua_version'] %>/luarocks /usr/local/openresty/luajit/share/lua/<%= image.labels['lua_version'] %>/luarocks
 
 RUN /usr/local/openresty/luajit/bin/luarocks install inspect \
  && rm -rf /var/cache/nginx

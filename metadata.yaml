@@ -7,5 +7,9 @@ registries:
 labels:
   maintainer: 'jesse@weisner.ca'
   alpine_version: '3.14'
+  openresty_version: '1.19.9'
+  lua_version: '5.1'
+  luarocks_version: '3.7.0'
+  luajit_version: '2.1'
 files:
   - 50-copy-config.sh

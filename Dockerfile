@@ -99,4 +99,6 @@ WORKDIR /application
 
 EXPOSE 8080
 
+# HEALTHCHECK CMD curl -s --fail http://localhost:8080/ping || exit 1
+
 CMD ["/usr/local/openresty/nginx/sbin/nginx", "-g", "daemon off;"]

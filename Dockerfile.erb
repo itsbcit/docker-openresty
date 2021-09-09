@@ -85,9 +85,12 @@ COPY 50-copy-config.sh /docker-entrypoint.d/
 
 USER nginx
 
-COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
-COPY default.conf /usr/local/openresty/nginx/conf.d/default.conf
-COPY resty-env.conf /usr/local/openresty/nginx/conf/resty-env.conf
+COPY default.conf               /usr/local/openresty/nginx/conf.d
+COPY nginx.conf                 /usr/local/openresty/nginx/conf
+COPY resty-env.conf             /usr/local/openresty/nginx/conf
+COPY resty-lua_shared_dict.conf /usr/local/openresty/nginx/conf
+COPY nginx-log_format.conf      /usr/local/openresty/nginx/conf
+COPY resty-session.conf         /usr/local/openresty/nginx/conf
 
 WORKDIR /application
 

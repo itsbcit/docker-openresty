@@ -4,20 +4,50 @@ desc 'Test docker images'
 task :test do
   puts '*** Testing images ***'.green
   $images.each do |image|
-    puts "Running tests on #{image.build_tag}"
-    container = `docker run --rm --health-interval=1s -d -p 8080 #{image.build_tag}`.strip
-    delay_seconds = 1
-    printf "Waiting for container startup"
-    100.times do
-      status = `docker inspect --format='{{json .State.Health.Status}}' #{container}`.strip
-      break if status != '"starting"'
-      sleep(delay_seconds)
-    end
-    puts
+    # basic container test
     begin
-      sh "docker exec #{container} /usr/bin/printf 'hello from #{image.build_tag}\'"
+      puts "Running tests on #{image.build_tag}"
+      container = `docker run --rm --health-interval=2s -d -p 8080 #{image.build_tag}`.strip
+
+      # wait for container state "running"
+      state = ''
+      printf 'Waiting for container startup'
+      10.times do
+        state = `docker inspect --format='{{.State.Status}}' #{container}`.strip
+        break if state == 'running'
+        printf "."
+        sleep 1
+      end
       puts
-      cmd = "curl -qs http://localhost:8080/ping"
+      if state != 'running'
+        puts "Container failed to reach \"running\" state. Got \"#{state}\"".red
+        exit 1
+      end
+
+      # if the container has a health check, wait for it to
+      container_health = `docker inspect --format='{{.State.Health}}' #{container}`.strip
+      hashealth = container_health == "<nil>" ? false : true
+      if hashealth
+        printf 'Waiting for container healthy'
+        health_status = ''
+        20.times do
+          health_status = `docker inspect --format='{{.State.Health.Status}}' #{container}`.strip
+          break if health_status == 'healthy'
+          printf "."
+          sleep 1
+        end
+        puts
+        if health_status != 'healthy'
+          puts "Container failed to reach \"healthy\" status. Got \"#{health_status}\"".red
+          exit 1
+        end
+      end
+      # end of basic container test
+
+      # Nginx function test
+      # get local forwarded port (random)
+      forwarded_port = `docker inspect --format='{{range $p, $conf := .NetworkSettings.Ports}}{{(index $conf 0).HostPort}} {{end}}' #{container}`.strip
+      cmd = "curl -qs http://localhost:#{forwarded_port}/ping"
       puts cmd
       response = `#{cmd}`
       puts response
@@ -25,9 +55,10 @@ task :test do
         puts "Received unexpected response \"#{response}\", expected \"pong\".".red
         exit 1
       end
+
+    # end of container tests
     ensure
       sh "docker kill #{container}"
-      sh d
     end
   end
 end

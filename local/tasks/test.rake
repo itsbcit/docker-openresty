@@ -6,7 +6,7 @@ task :test do
   $images.each do |image|
     # basic container test
     begin
-      puts "Running tests on #{image.build_tag}"
+      puts "Running tests on #{image.build_tag}".green
       container = `docker run --rm --health-interval=2s -d -p 8080 #{image.build_tag}`.strip
 
       # wait for container state "running"
@@ -57,8 +57,9 @@ task :test do
       end
 
     # end of container tests
-    ensure
-      sh "docker kill #{container}"
-    end
+  ensure
+    sh "docker kill #{container}"
   end
+  puts "Testing image #{image.build_tag} successful.".green
+end
 end

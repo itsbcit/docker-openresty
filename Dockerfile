@@ -35,9 +35,9 @@ ENV RUNUSER nginx
 ENV HOME /var/cache/nginx
 ENV RESTY_SESSION_SECRET "00000000000000000000000000000000"
 
-RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
+RUN wget 'https://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
- && echo "http://openresty.org/package/alpine/v3.14/main" \
+ && echo "https://openresty.org/package/alpine/v3.14/main" \
         >> /etc/apk/repositories
 
 RUN apk add --no-cache \

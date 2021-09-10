@@ -1,4 +1,4 @@
-FROM bcit.io/alpine:3.14-latest as builder
+FROM bcit.io/alpine:3.14 as builder
 RUN wget 'http://openresty.org/package/admin@openresty.com-5ea678a6.rsa.pub' \
         -O '/etc/apk/keys/admin@openresty.com-5ea678a6.rsa.pub' \
  && echo "http://openresty.org/package/alpine/v3.14/main" \
@@ -21,7 +21,7 @@ RUN ./configure --prefix=/usr/local/openresty/luajit \
  && make \
  && make install
 
-FROM bcit.io/alpine:3.14-latest
+FROM bcit.io/alpine:3.14
 
 LABEL maintainer="jesse@weisner.ca"
 LABEL alpine_version="3.14"

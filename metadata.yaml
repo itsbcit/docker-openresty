@@ -1,7 +1,7 @@
 ---
 registries:
   - url: bcit.io
-image_name: openshift-openresty
+image_name: openresty
 registries:
   - url: bcit.io
 labels:

@@ -29,7 +29,7 @@ LABEL openresty_version="1.19.9"
 LABEL lua_version="5.1"
 LABEL luarocks_version="3.7.0"
 LABEL luajit_version="2.1"
-LABEL build_id="1631309228"
+LABEL build_id="1631902776"
 
 ENV RUNUSER nginx
 ENV HOME /var/cache/nginx

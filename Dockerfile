@@ -24,12 +24,12 @@ RUN ./configure --prefix=/usr/local/openresty/luajit \
 FROM bcit.io/alpine:3.14
 
 LABEL maintainer="jesse@weisner.ca"
+LABEL build_id="1648149346"
 LABEL alpine_version="3.14"
 LABEL openresty_version="1.19.9"
 LABEL lua_version="5.1"
 LABEL luarocks_version="3.7.0"
 LABEL luajit_version="2.1"
-LABEL build_id="1631905154"
 
 ENV RUNUSER nginx
 ENV HOME /var/cache/nginx
